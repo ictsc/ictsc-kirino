@@ -1,10 +1,10 @@
-name: Update ical data
+name: Check answer
 on:
   schedule:
     - cron: '*/2 * * * *'
   workflow_dispatch:
 jobs:
-  update:
+  check_answer:
     name: Check answer
     runs-on: ubuntu-latest
     steps:
