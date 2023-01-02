@@ -25,6 +25,11 @@ def send_slack(line):
     response = requests.post("https://hooks.slack.com/services/",data=json.dumps(payload))
     print(f'{response.status_code} {response.text}')
 
+def send_slack_str(text):
+    payload={"text": text}
+    response = requests.post("https://hooks.slack.com/services/",data=json.dumps(payload))
+    print(f'{response.status_code} {response.text}')
+
 result = []
 
 with connection:
@@ -32,5 +37,6 @@ with connection:
         sql = "SELECT answers.id, answers.created_at, problems.code, problems.title, user_groups.name FROM answers INNER JOIN problems ON answers.problem_id = problems.id INNER JOIN user_groups ON answers.user_group_id = user_groups.id WHERE NOW() > ( answers.created_at + INTERVAL 15 MINUTE ) AND answers.point IS NULL ORDER BY answers.updated_at;"
         cursor.execute(sql)
         result = cursor.fetchall()
+        send_slack_str("########################################")
         for line in result:
             send_slack(line)
